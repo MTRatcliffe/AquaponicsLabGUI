@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<head>
+  <!-- GNU Info
+        ================================================== 
+    This file is part of the Open Source ESP8266 Bases Valve controller.
+
+    Free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Open Source pH controller.  If not, see <http://www.gnu.org/licenses/>.
+
+Code and comments provided by Michael Ratcliffe in partnership with AquaponicsLAb.org 
+For More information see:
+http://MichaelRatcliffe.com
+http://AquaponicsLab.org
+
+ ================================================== -->
+
+
+  <!-- Basic Page Needs
+        ================================================== -->
+ 	<meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="icon" type="image/png" href="img/fish.png">
+        <title>AquaponicsLab</title>
+        <meta name="description" content="Michael Ratcliffe">
+        <meta name="keywords" content="Michael Ratcliffe">
+        <meta name="author" content="Michael Ratcliffe">
+
+
+
+<!-- Mobile Specific Metas
+        ================================================== -->
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+
+
+ <!-- Template CSS Files
+        ================================================== -->
+	<link rel='stylesheet' href='css/bootstrap.min.css'>
+     
+
+
+
+ <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+<!-- javascript
+================================================== -->
+
+<!-- This is the stuff for the nob inputs -->
+<script src="js/jquery.knob.min.js"></script>
+ <script type="text/javascript">
+      $(document).ready(function() {   
+
+      $('.knob').knob();
+      });
+    </script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+<!--
+
+       ==================================================
+        WebSockets Code [Lets us change variables]
+        ================================================== -->
+<script>
+var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
+
+//Page Opened, tell esp to send readings data
+connection.onopen = function () { 
+ connection.send('Connect ' + new Date()); 
+ connection.send("#ConnectedReadings#");
+};
+//Page Closed, Tell ESP t Stop Sending Data
+connection.onclose = function () {  
+ connection.send("#CLosedReadings#");
+};
+
+connection.onerror = function (error) { 
+console.log('WebSocket Error ', error);
+};
+
+// Checking the Incming message for useful sensor informatin
+connection.onmessage = function(e) { 
+console.log('Server: ', e.data);
+connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
+			 
+			if(e.data.startsWith("#Time#")){
+			document.getElementById("time").placeholder = e.data.substring(6);
+			}
+			
+			} 
+			if(e.data.startsWith("#S1#")){
+			document.getElementById("s1").value = e.data.substring(4);
+			}
+			if(e.data.startsWith("#S2#")){
+			document.getElementById("s2").value = e.data.substring(4);
+			}
+			if(e.data.startsWith("#S3#")){
+			document.getElementById("s3").value = e.data.substring(4);
+			}   
+			
+
+ 
+};
+</script>
+
+
+<!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+</head>
+<body  style='background-color: #000;'>
+<div class='container'>
+<div class='row'>
+<div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
+<h1><p class="text-warning">Valve Control Made Easy</p></h1>
+</div>
+</div>
+
+<!--
+        ==================================================
+        Second title Settings
+        ================================================== -->
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<h2>
+</i> Real Time Readings </i>
+</h2>
+</div>
+</div>
+
+<!--
+        ==================================================
+        Main Image
+        ================================================== 
+<div class="text-xs-center">
+<img class="img-responsive center-block" src="img/fish.png" alt="Michael Ratcliffe" height='330px' width='330px'> 
+</div>
+-->
+
+
+<!--
+
+    ==================================================
+            Variables section foor Webosockets [where we change set points]
+            ================================================== -->
+
+<div class='col-md-12' style='text-align: center;'>
+BED Timing Control:<br/>
+<br/>
+
+
+<div class="container" >
+<form class="form-inline" role="form">
+    <div class="form-group" >
+      <div class="col-xs-3" >
+        <label for="time">Time:</label>
+        <input class="form-control" id="time" type="text" placeholder="Time">
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
+
+
+<div class="row">
+
+
+       <div class="col-md-3 "> <center> <br/>
+	</div>
+
+            <div class="col-md-2 "> <center> <br/>
+		Pressure Time 
+		<br/>
+              <input type="text" id="s1" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+<br/>
+[Seconds]
+<br/>
+            </div>
+            <div class="col-md-2"> <center> <br/>
+Bed Cycle Time 
+<br/>
+              <input type="text" id="s2" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+<br/>
+
+[Minutes]
+<br/>
+            </div>
+
+            <div class="col-md-2" > <center> <br/>
+		
+		Release  Time
+		<br/>
+              <input type="text" id="s3" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+<br/>
+		
+		[Seconds]
+<br/>
+		   </div>
+
+</div>
+<div class="col-md-3 "> <center> <br/>	
+<div class="ct-chart" id="chart1"></div>
+<br/>
+</div>
+<br/>
+
+<!-- Button to commit changes, we only call the websockts function if this is called 
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<br/>
+<input type="button"  value="Commit Changes" onclick="UpdateSetpoints();">  
+</div>
+</div>
+<!--
+    ==================================================
+            Bottom Buttons Section
+            ================================================== -->
+<center>
+<br/>
+<div class='btn-group' role='group' aria-label='MENU'>
+<!--
+    =============
+            Home Button
+            ================== -->
+<a href='index.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Home </a>
+<!--
+    =============
+            About Button
+            ================== -->
+<a href='about.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>About </a>
+<!--
+    =============
+            Wifi Settings
+            ================== -->
+<a href='wifi.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Wifi Setup </a>
+<!--
+    =============
+            SetPoints
+            ================== -->
+<a href='setpoints.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Setpoints </a>
+<!--
+    =============
+            Readings
+            ================== -->
+<a href='readings.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Readings </a>
+<!--
+    =============
+           Logs
+            ================== -->
+<a href='Logs.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Logs </a>
+<!--
+    =============
+            Updates
+            ================== -->
+<a href='updates.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Updates </a>
+<!--
+    ============================
+            Closing Everything up
+            ================================== -->
+</div>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+</body>
+</html>

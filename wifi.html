@@ -52,11 +52,60 @@ http://AquaponicsLab.org
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 <!--
+
+       ==================================================
+        WebSockets Code [Lets us change Wifi Password]
+        ================================================== -->
+<script>
+var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
+
+connection.onopen = function () { 
+ connection.send('Connect ' + new Date()); 
+ connection.send("#ConnectedWIFI#");
+};
+
+connection.onerror = function (error) { 
+console.log('WebSocket Error ', error);
+};
+
+connection.onmessage = function(e) { 
+ console.log('Server: ', e.data);
+			 if(e.data === "ChangedWIFIHOTSPOT" ){
+			    alert("HORSPOT WIFI Updated ");
+			}
+			if(e.data.startsWith("#HotSpotName#")){
+			document.getElementById("HotSpotName").placeholder = e.data.substring(13);
+			
+			}
+			if(e.data.startsWith("#HotSpotPass#")){
+			document.getElementById("PasswordHotSpot").placeholder = e.data.substring(13);
+			}
+			
+
+ 
+};
+
+
+
+//Sending all Three SetPoints one after another
+function UpdateHOTSPOT(){
+    var v1 =document.getElementById('HotSpotName').value
+    var v2 =document.getElementById('HotSpotPass').value
+
+    connection.send("#NewHorSpotSsid#"+v1); 
+    connection.send("#NewHotSpotPass#"+v2); 
+        
+    };
+
+</script>
+
+<!--
         ==================================================
         Header Section Start
         ================================================== -->
 </head>
-<body style='background-color: #000;'>
+<body style='background-color: #000;' >
+
 <div class='container'>
 <div class='row'>
 <div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
@@ -71,7 +120,8 @@ http://AquaponicsLab.org
 <div class='row'>
 <div class='col-md-12' style='text-align: center;'>
 <h2>
-</i> Home </i>
+<i class='fa fa-users'>
+</i> Wifi Settings <i class='fa fa-users'></i>
 </h2>
 </div>
 </div>
@@ -84,10 +134,38 @@ http://AquaponicsLab.org
 <img class="img-responsive center-block" src="img/fish.png" alt="Michael Ratcliffe" height='330px' width='330px'> 
 </div>
 <!--
+        ==================================================
+        Wifi Selection Part
+        ================================================== -->
+<!  ----------- Drop Down  ------------------------- -->
+
+
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<div class="form-group">
+  <label for="usr">HotSpot Name:</label>
+  <input type="text" class="form-control" id="HotSpotName" placeholder="Test">
+</div>
+<div class="form-group">
+  <label for="pwd">HotSpot Password:</label>
+<input type="text" class="form-control" id="PasswordHotSpot" placeholder="Test">
+
+</div>
+</div>
+<!-- Button to commit changes, we only call the websockts function if this is called -->
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<br/>
+<input type="button"  value="Commit Changes" onclick="UpdateHOTSPOT();">  
+</div>
+</div>
+
+<!--
     ==================================================
             Bottom Buttons Section
             ================================================== -->
 <center>
+<br/>
 <div class='btn-group' role='group' aria-label='MENU'>
 <!--
     =============
@@ -128,18 +206,7 @@ http://AquaponicsLab.org
     ============================
             Closing Everything up
             ================================== -->
-</div>
-</center>
-</div>
-</div>
-</div>
-</div>
-
-
-
-
-
-
+            
 </div>
 </center>
 </div>

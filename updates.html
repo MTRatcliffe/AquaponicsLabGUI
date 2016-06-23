@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<head>
+  <!-- GNU Info
+        ================================================== 
+    This file is part of the Open Source ESP8266 Based Controllers
+
+    Free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Open Source pH controller.  If not, see <http://www.gnu.org/licenses/>.
+
+Code and comments provided by Michael Ratcliffe in partnership with AquaponicsLAb.org 
+For More information see:
+http://MichaelRatcliffe.com
+http://AquaponicsLab.org
+
+ ================================================== -->
+
+
+  <!-- Basic Page Needs
+        ================================================== -->
+ 	<meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="icon" type="image/png" href="img/fish.png">
+        <title>AquaponicsLab</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+
+
+
+<!-- Mobile Specific Metas
+        ================================================== -->
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+ <!-- Template CSS Files
+        ================================================== -->
+	<link rel='stylesheet' href='css/bootstrap.min.css'>
+     
+	
+ <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+<!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+</head>
+<body style='background-color: #000;'>
+<div class='container'>
+<div class='row'>
+<div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
+<h1><p class="text-warning">Humidity Control Made Easy</p></h1>
+</div>
+</div>
+<!--
+        ==================================================
+        Second title Settings
+        ================================================== -->
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<h2>
+</i> Updates </i>
+</h2>
+</div>
+</div>
+
+
+<!--
+    =========================================================
+           Hot Links
+   ========================================================== -->
+  <center>
+<div class="row ">
+                <div class="col-md-12">
+                    
+                      <h4 class="service-heading">Current Version: V1.a</h4> <a href="#Current" class="portfolio-link" data-toggle="modal">
+                                <i class="glyphicon glyphicon-plus"></i>  </a>
+                    <p class="text-muted">Help You Get Those Electronics Projects Done
+		    <br> Experties in:
+
+		<h4 class="service-heading">Planned Updates:</h4>
+                    <br> >V1.x <a href="#V1" class="portfolio-link" data-toggle="modal">
+                                <i class="glyphicon glyphicon-plus"></i>  </a>
+		    <br> >V2.x<a href="#V2" class="portfolio-link" data-toggle="modal">
+                                <i class="glyphicon glyphicon-plus"></i>  </a>
+                    <br> >V3.x<a href="#V3" class="portfolio-link" data-toggle="modal">
+                                <i class="glyphicon glyphicon-plus"></i>  </a>
+		   <br> >V4.x<a href="#V4" class="portfolio-link" data-toggle="modal">
+                                <i class="glyphicon glyphicon-plus"></i>  </a>
+
+
+
+                    </p>
+                </div>
+
+</center>
+
+
+<!--
+    =========================================================
+           End Of Hot Links
+   ========================================================== -->
+
+
+
+
+
+
+
+<!--
+    ==================================================
+            Bottom Buttons Section
+            ================================================== -->
+<center>
+<div class='btn-group' role='group' aria-label='MENU'>
+<!--
+    =============
+            Home Button
+            ================== -->
+<a href='index.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Home </a>
+<!--
+    =============
+            About Button
+            ================== -->
+<a href='about.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>About </a>
+<!--
+    =============
+            Wifi Settings
+            ================== -->
+<a href='wifi.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Wifi Setup </a>
+<!--
+    =============
+            SetPoints
+            ================== -->
+<a href='setpoints.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Setpoints </a>
+<!--
+    =============
+            Readings
+            ================== -->
+<a href='readings.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Readings </a>
+<!--
+    =============
+           Logs
+            ================== -->
+<a href='Logs.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Logs </a>
+<!--
+    =============
+            Updates
+            ================== -->
+<a href='updates.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Updates </a>
+<!--
+    ============================
+            Closing Everything up
+            ================================== -->
+</div>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+<!--
+    ====================================================================
+            Pop Up Modules
+    ==================================================================== -->
+
+    <!--========================================================Portfolio Modal V1 ================================================= -->
+    <div class="portfolio-modal modal fade" id="Current" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Current Version 1.1</h2>
+                            <p class="item-intro text-muted">All of the content of this Website is written by myself and AquaponicsLab including the scrips/codes and design tutorials unless stated otherwise.
+Everything is released as Copy Left:  Use it as You Wish</p>
+                            <img class="img-responsive  center-block" src="img/gnu.png" alt="michaelratcliffe.com">
+                            <p> 
+Scripts/codes under GNU:
+Known Issues/Bugs:
+>
+
+</p>
+                            <p>For More info: <a href="https://www.gnu.org/home.en.html" target="_blank" >here</a>.</p>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--
+    ====================================================================
+            Pop Up Modules
+    ==================================================================== -->
+
+    <!--========================================================Portfolio Modal V1 ================================================= -->
+    <div class="portfolio-modal modal fade" id="V1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Project Licensing</h2>
+                            <p class="item-intro text-muted">All of the content of this Website is written by myself and AquaponicsLab including the scrips/codes and design tutorials unless stated otherwise.
+Everything is released as Copy Left:  Use it as You Wish</p>
+                            <img class="img-responsive  center-block" src="img/gnu.png" alt="michaelratcliffe.com">
+                            <p> 
+Scripts/codes under GNU:
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See theGNU General Public License for more details.</p>
+                            <p>For More info: <a href="https://www.gnu.org/home.en.html" target="_blank" >here</a>.</p>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ <!--========================================================Portfolio Modal Version 2 ================================================= -->
+    <div class="portfolio-modal modal fade" id="V2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Version 2</h2>
+                            <p class="item-intro text-muted"> Here at the AquaponicsLab we are working on making home grown food easier, cheaper and organic. Second Generation Controllers will be real IOT.
+</p>
+                            <img class="img-responsive  center-block" src="img/fish.png" alt="michaelratcliffe.com">
+                            <p> 
+<br>
+>Connect NTP Server [Schedule tasks based on time of day]
+<br>
+>Log Sensor readings to Cloud [ the ESP will run out of memory, it will be great to have a longer record stored online]
+</p>
+                            
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ <!--========================================================Portfolio Modal Version 3 ================================================= -->
+    <div class="portfolio-modal modal fade" id="V3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Version 3</h2>
+                            <p class="item-intro text-muted"> Here at the AquaponicsLab we are working on making home grown food easier, cheaper and organic.
+</p>
+                            <img class="img-responsive  center-block" src="img/fish.png" alt="michaelratcliffe.com">
+                            <p> 
+<br>
+The Third Generation Developments will be aimed at incresing productivity:
+<br>
+>Select your Crop and let the controller Fine Tune the Setpoints
+
+
+</p>
+                           
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ <!--========================================================Portfolio Modal Version 3 ================================================= -->
+    <div class="portfolio-modal modal fade" id="V4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Version 4</h2>
+                            <p class="item-intro text-muted"> Here at the AquaponicsLab we are working on making home grown food easier, cheaper and organic.
+</p>
+                            <img class="img-responsive  center-block" src="img/fish.png" alt="michaelratcliffe.com">
+                            <p> 
+<br>
+The Esp Is a Power Hungry Beast, V4 will be optimised to reduce power ussage:
+<br>
+>More Eco Friendly
+<br>
+>Ready to Go Solar
+
+
+</p>
+                            
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

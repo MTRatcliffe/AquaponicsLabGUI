@@ -31,32 +31,88 @@ http://AquaponicsLab.org
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="icon" type="image/png" href="img/fish.png">
         <title>AquaponicsLab</title>
-        <meta name="description" content="">
-        <meta name="keywords" content="">
-        <meta name="author" content="">
-
-
+        <meta name="description" content="Michael Ratcliffe">
+        <meta name="keywords" content="Michael Ratcliffe">
+        <meta name="author" content="Michael Ratcliffe">
 
 <!-- Mobile Specific Metas
         ================================================== -->
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
- <!-- Template CSS Files
+<!-- Template CSS Files
         ================================================== -->
 	<link rel='stylesheet' href='css/bootstrap.min.css'>
      
-	
- <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+<!-- jQuery -->
+ <script src="js/jquery.js"></script>
+<!-- javascript
+================================================== -->
 
+<!-- This is the stuff for the nob inputs -->
+<script src="js/jquery.knob.min.js"></script>
+ <script type="text/javascript">
+      $(document).ready(function() {   
+
+      $('.knob').knob();
+      });
+    </script>
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+<!--
+
+       ==================================================
+        WebSockets Code [Lets us change variables]
+        ================================================== -->
+<script>
+var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
+
+connection.onopen = function () { 
+ connection.send('Connect ' + new Date()); 
+ connection.send("#ConnectedSetPoints#");
+};
+
+connection.onerror = function (error) { 
+console.log('WebSocket Error ', error);
+};
+
+connection.onmessage = function(e) { 
+ console.log('Server: ', e.data);
+			 if(e.data === "ChangedSetPoints" ){
+			    alert("SetPoints Updated ");
+			}
+			if(e.data.startsWith("#V1#")){
+			document.getElementById("v1").value = e.data.substring(4);
+			
+			}
+			if(e.data.startsWith("#V2#")){
+			document.getElementById("v2").value = e.data.substring(4);
+			}
+			if(e.data.startsWith("#V3#")){
+			document.getElementById("v3").value = e.data.substring(4);
+			}   
+
+ 
+};
+
+//Sending all Three SetPoints one after another
+function UpdateSetpoints(){
+    var v1 =document.getElementById('v1').value
+    var v2 =document.getElementById('v2').value
+    var v3 =document.getElementById('v3').value
+    connection.send("#Setpoint1#"+v1); 
+    connection.send("#Setpoint2#"+v2); 
+    connection.send("#Setpoint3#"+v3);     
+    };
+
+
+
+</script>
 <!--
         ==================================================
         Header Section Start
         ================================================== -->
 </head>
-<body style='background-color: #000;'>
+<body  style='background-color: #000;'>
 <div class='container'>
 <div class='row'>
 <div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
@@ -79,15 +135,74 @@ http://AquaponicsLab.org
 <!--
         ==================================================
         Main Image
-        ================================================== -->
+        ================================================== 
 <div class="text-xs-center">
 <img class="img-responsive center-block" src="img/fish.png" alt="Michael Ratcliffe" height='330px' width='330px'> 
+</div>
+-->
+
+<!--
+
+    ==================================================
+            Variables section foor Webosockets [where we change set points]
+            ================================================== -->
+
+<div class='col-md-12' style='text-align: center;'>
+BED Timing Control:<br/>
+<br/>
+</div>
+
+
+<div class="row">
+
+
+       <div class="col-md-3 "> <center> <br/>
+	</div>
+
+            <div class="col-md-2 "> <center> <br/>
+		Pressure Time 
+		<br/>
+              <input type="text" id="v1" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+<br/>
+[Seconds]
+<br/>
+            </div>
+            <div class="col-md-2"> <center> <br/>
+Bed Cycle Time 
+<br/>
+              <input type="text" id="v2" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+<br/>
+
+[Minutes]
+<br/>
+            </div>
+
+            <div class="col-md-2" > <center> <br/>
+		
+		Release  Time
+		<br/>
+              <input type="text" id="v3" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+<br/>
+		
+		[Seconds]
+<br/>
+		   </div>
+
+</div>
+
+<!-- Button to commit changes, we only call the websockts function if this is called -->
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<br/>
+<input type="button"  value="Commit Changes" onclick="UpdateSetpoints();">  
+</div>
 </div>
 <!--
     ==================================================
             Bottom Buttons Section
             ================================================== -->
 <center>
+<br/>
 <div class='btn-group' role='group' aria-label='MENU'>
 <!--
     =============
