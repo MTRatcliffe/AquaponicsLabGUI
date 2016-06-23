@@ -262,7 +262,7 @@ function GetData5(){
  function SortData(){
 //Deciding what part of the rotary file system we are in, addng log files in order to suit
 console.info('Combining files');
-var FileNumber = parseInt(File);
+var FileNumber = 5;
 if (FileNumber===1){ 
 console.info('Files 1-2-3-4-5');
 TotalV1 = data2V1.concat(data3V1,data4V1,data5V1,data1V1);
@@ -424,7 +424,11 @@ chart.update(newData)
         ================================================== -->
 </head>
 <body  style='background-color: #000;'>
-
+<script type="text/javascript">
+    $(window).load(function(){
+       GetHeaderData();
+    });
+</script>
 
 <div class='container'>
 <div class='row'>
