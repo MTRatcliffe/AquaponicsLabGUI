@@ -355,20 +355,15 @@ chart.update(newData)
 
 ///
 function GraphDay(){
-
-var data1 = [];
-var data2 = [];
-for (var i = 0; i < TotalV1.length; i++) {
-    data1.push(TotalV1[i], TotalV1[i+1]); 
-    data1.push(TotalV2[i], TotalV2[i+1]); 
+var data = [];
+var Length =TotalV1.length-10;
+for (var i = Length; i < TotalV1.length; i++) {
+    data.push(TotalV1[i], TotalV1[i+1]); 
 i++
 }
 var newData = {
  // labels:[dataN.slice(1, 10)],
- series: [
-[{ data: data1}],
-[{data: data2}]
-]
+ series: [{ data: data}]
 };
 
 
