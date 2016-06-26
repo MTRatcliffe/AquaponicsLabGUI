@@ -391,7 +391,8 @@ var options = {
   // If set to true the full width will be used to distribute the values where the last value will be at the maximum of the axis length. If false the spaces between the ticks will be evenly distributed instead.
  // stretch: true
 };
-chart.update(newData,options)
+this.options = Chartist.extend({}, override ? this.options : this.defaultOptions, options);
+chart.update(newData)
 }
 ///////
 function GraphMonth(){
