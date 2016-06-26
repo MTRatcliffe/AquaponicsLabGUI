@@ -562,7 +562,7 @@ var options = {
   // If ticks is explicitly set, then the axis will not compute the ticks with the divisor, but directly use the data in ticks to determine at what points on the axis a tick need to be generated.
 
   axisX: {
-    type: Chartist.FixedScaleAxis,
+   type: Chartist.FixedScaleAxis,
     ticks: [0, 5, 7, 8, 10]
   }
 
@@ -571,7 +571,7 @@ var Data = {
  //labels:['1','2','3','4','5'],
  series: [ ['0','5','10','15','20']]
 };
-var chart = new Chartist.Line('.ct-chart',Data,options);
+var chart = new Chartist.Line('.ct-chart',Data);
 
 /*var chart = new Chartist.Line('.ct-chart', {
  // labels: ['Loading', '', '', '', 'Data'],
