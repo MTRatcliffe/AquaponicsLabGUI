@@ -566,8 +566,15 @@ ticks: ['One', 'Two', 'Three'],
   fullWidth: true,
   chartPadding: {
     right: 40
+axisY: {
+            type: Chartist.FixedScaleAxis,  
+            low: 0,
+            high: 10,
+            ticks: [0, 5, 10]                // the ticks don't show up 
+        }
   }
 });
+
 
 
 
