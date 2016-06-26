@@ -382,8 +382,14 @@ for (var i = Length; i < TotalV1.length; i++) {
 i++
 }
 var newData = {
- labels: ['1', '2', '3','4','5','6','7'],
+ //labels: ['1', '2', '3','4','5','6','7'],
  series: [{ data: data}]
+};
+var options = {
+  // Ticks to be used to distribute across the axis length. As this axis type relies on the index of the value rather than the value, arbitrary data that can be converted to a string can be used as ticks.
+  ticks: ['One', 'Two', 'Three'],
+  // If set to true the full width will be used to distribute the values where the last value will be at the maximum of the axis length. If false the spaces between the ticks will be evenly distributed instead.
+ // stretch: true
 };
 chart.update(newData)
 }
