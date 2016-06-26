@@ -65,6 +65,8 @@ http://AquaponicsLab.org
 
 //Declaring a load of variables [javvascrpt seems to be local @@@]
 
+var ReadingsPerday =10
+
 var File,FileNumber;
 var dataH1 = [];
 var dataH2 = [];
@@ -356,7 +358,7 @@ chart.update(newData)
 ///
 function GraphDay(){
 var data = [];
-var Length =TotalV1.length-10;
+var Length =TotalV1.length-ReadingsPerday;
 for (var i = Length; i < TotalV1.length; i++) {
     data.push(TotalV1[i], TotalV1[i+1]); 
 i++
