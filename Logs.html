@@ -560,9 +560,13 @@ chart.update(newData)
 var options = {
 
   // If ticks is explicitly set, then the axis will not compute the ticks with the divisor, but directly use the data in ticks to determine at what points on the axis a tick need to be generated.
-  ticks: ["One", "Two", "Three"],
 
- stretch: true
+  axisX: {
+    type: Chartist.FixedScaleAxis,
+    ticks: [0, 50, 75, 87.5, 100],
+    low: 0
+  }
+
 };
 var Data = {
  labels:['1','2','3','4','5'],
