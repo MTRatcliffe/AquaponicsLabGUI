@@ -557,21 +557,17 @@ chart.update(newData)
 
 <script>
 var chart = new Chartist.Line('.ct-chart', {
-labels: ['1', '2', '3', '4', '5'],
+ // labels: ['Loading', '', '', '', 'Data'],
 //ticks: ['One', 'Two', 'Three'],
   series: [
-    [0, 5, 10, 15, 20]
+    [0, 5, 10, 15, 20],
   ]
 }, {
- // fullWidth: true,
-//  chartPadding: {
- //   right: 40}
- // },
-axisX: {
-    type: Chartist.FixedScaleAxis,
-    ticks: [0, 5, 7, 8, 10],
-    //low: 0
-  }
+  fullWidth: true,
+  chartPadding: {
+    right: 40
+  },
+
 
 });
 
