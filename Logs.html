@@ -375,13 +375,18 @@ chart.update(newData)
 function GraphWeek(){
 //*********************** <<<<< This part  below is not worlking*******
 var data = [];
-for (var i = 0; i < TotalV1.length; i++) {
-    data.push(i, TotalV1[i]); 
+var data = [];
+var Length =TotalV1.length-(ReadingsPerday*7);
+for (var i = Length; i < TotalV1.length; i++) {
+    data.push(TotalV1[i], TotalV1[i+1]); 
+i++
 }
 var newData = {
- labels:[{dataN}],
- series: [{data}]
+ // labels:[dataN.slice(1, 10)],
+ series: [{ data: data}]
 };
+
+
 chart.update(newData)
 }
 ///////
