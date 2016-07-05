@@ -119,8 +119,22 @@ console.log('Server: ', e.data);
 		File = e.data.substring(11);
                 GetHeaderData();
 				}
+//Getting the current log file number from ESP va websockets
+		if(e.data.startsWith("#LogDeleeted#")){
+		alert("LOG Deleeted ");
+				}
+
+ 
 
 };
+
+//Sending all Three SetPoints one after another
+function DeleetLogs(){
+    connection.send("#DeleetLog#"); 
+    ;     
+ 
+    };
+
 
 //<!--
  //      ==================================================
@@ -490,6 +504,9 @@ chart.update(newData)
 <div class='col-md-12' style='text-align: center;'>
 <br/>
 <input type="button"  value="Download Log File" onclick="DownloadLog();">  
+<input type="button"  value="Deleet Logs" href="#aquaponicslab" class="portfolio-link" data-toggle="modal"> 
+
+
 </div>
 </div>
 <!--
@@ -592,8 +609,38 @@ var chart = new Chartist.Line('.ct-chart',Data);
 
 
 </script>
+<!--
+    ====================================================================
+            Pop Up Modules
+    ==================================================================== -->
 
+    <!--========================================================Portfolio Modal GNU ================================================= -->
+ <!--========================================================Portfolio Modal AquaponicsLAb ================================================= -->
+    <div class="portfolio-modal modal fade" id="aquaponicslab" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Deleet All Data</h2>
+                            <p class="item-intro text-muted"> Click Confirm Below To Reset Data Log
+</p>
+                            <button type="button" class="btn btn-primary" value="Download Log File" onclick="DeleetLogs();"></i> Confirm Deleet</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>
 </html>
+
