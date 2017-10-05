@@ -30,7 +30,7 @@ http://AquaponicsLab.org
  	<meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="icon" type="image/png" href="img/fish.png">
-        <title>AquaponicsLab</title>
+        <title>AquaponicsLab --Setpoints</title>
         <meta name="description" content="Michael Ratcliffe">
         <meta name="keywords" content="Michael Ratcliffe">
         <meta name="author" content="Michael Ratcliffe">
@@ -39,37 +39,66 @@ http://AquaponicsLab.org
         ================================================== -->
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-<!-- Template CSS Files
+ <!-- Template CSS Files
         ================================================== -->
-	<link rel='stylesheet' href='css/bootstrap.min.css'>
+	<link rel='stylesheet' href='css/temp.css'>
      
-<!-- jQuery -->
- <script src="js/jquery.js"></script>
+
+ <!-- jQuery -->
+    <script src="js/JSFiles.js"></script>
 <!-- javascript
 ================================================== -->
 
 <!-- This is the stuff for the nob inputs -->
-<script src="js/jquery.knob.min.js"></script>
+
  <script type="text/javascript">
       $(document).ready(function() {   
 
       $('.knob').knob();
       });
     </script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+  
+
+<script>
+//************************* A Countdon Timer Hacked Together... Can it be improved?
+function StartTimer(){
+var d = new Date();
+StartTime = d.getTime()+60000;
+Calibrate1();// moving nto websockets code, to send caliibration related data
+}
+
+$(document).ready(function() {
+       $('CalibrateStep2').modal();  
+    var myVar=setInterval(function(){myTimer()},1000);
+
+    function myTimer() {
+         var d = new Date();
+         var n = (StartTime-d.getTime())/1000;
+          var n =n.toFixed(0);
+    document.getElementById("Progress").innerHTML = n;
+
+    }
+});
+
+ </script>
+
+
+
 <!--
 
        ==================================================
         WebSockets Code [Lets us change variables]
         ================================================== -->
 <script>
+ var StartTime = 60000; //a varable we will call later
+
 var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
 
 connection.onopen = function () { 
  connection.send('Connect ' + new Date()); 
  connection.send("#ConnectedSetPoints#");
 };
+
 
 connection.onerror = function (error) { 
 console.log('WebSocket Error ', error);
@@ -90,8 +119,20 @@ connection.onmessage = function(e) {
 			if(e.data.startsWith("#V3#")){
 			document.getElementById("v3").value = e.data.substring(4);
 			}   
+					if(e.data.startsWith("#Calibration_1_Done#")){
+					var Knew = e.data.substring(20);
+                                        document.getElementById("#K").innerHTML = Knew;
+									//data-dismiss="modal"
+									$('#Calibrate').modal('hide');
+									$('#CalibrateStep2').modal('hide');
+									$("#Compleet").modal();
 
- 
+									}   
+					if(e.data.startsWith("#Saved_Calibration#")){
+							alert("Calibration Compleet ");
+									}   
+
+
 };
 
 //Sending all Three SetPoints one after another
@@ -104,8 +145,18 @@ function UpdateSetpoints(){
     connection.send("#Setpoint3#"+v3);     
     };
 
+//Sending the comand to calibrate
+function Calibrate1(){
+ var EC =document.getElementById('EC_Cal').value
+    connection.send("#Calibrate_1#"+EC); 
+};
 
 
+
+function SaveEEPROM(){
+connection.send("#SaveEEPROM#");
+
+}
 </script>
 <!--
         ==================================================
@@ -116,7 +167,7 @@ function UpdateSetpoints(){
 <div class='container'>
 <div class='row'>
 <div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
-<h1><p class="text-warning">Valve Control Made Easy</p></h1>
+<h1><p class="text-warning">Controller Set Points</p></h1>
 </div>
 </div>
 
@@ -126,9 +177,6 @@ function UpdateSetpoints(){
         ================================================== -->
 <div class='row'>
 <div class='col-md-12' style='text-align: center;'>
-<h2>
-</i> Home </i>
-</h2>
 </div>
 </div>
 
@@ -148,10 +196,17 @@ function UpdateSetpoints(){
             ================================================== -->
 
 <div class='col-md-12' style='text-align: center;'>
-BED Timing Control:<br/>
+<br/>
 <br/>
 </div>
 
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<br/>
+
+<input type="button"  value="Calibrate EC Probe" href="#Calibrate" class="portfolio-link" data-toggle="modal">  
+</div>
+</div>
 
 <div class="row">
 
@@ -160,31 +215,31 @@ BED Timing Control:<br/>
 	</div>
 
             <div class="col-md-2 "> <center> <br/>
-		Pressure Time 
+		System Volume 
 		<br/>
-              <input type="text" id="v1" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+              <input type="text" id="v1" class="input-small knob" value="41" data-min="1" data-max="2450" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
 <br/>
-[Seconds]
+[Liters]
 <br/>
             </div>
             <div class="col-md-2"> <center> <br/>
-Bed Cycle Time 
+EC Setpoint 
 <br/>
-              <input type="text" id="v2" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+              <input type="text" id="v2" class="input-small knob" value="400" data-min="300" data-max="2450" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
 <br/>
 
-[Minutes]
+[uS/cm]
 <br/>
             </div>
 
             <div class="col-md-2" > <center> <br/>
 		
-		Release  Time
+		Nutrient Soluton [= (N*20) + (P*8.8) +(K*16)]
 		<br/>
-              <input type="text" id="v3" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+              <input type="text" id="v3" class="input-small knob" value="41" data-min="1" data-max="2000" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
 <br/>
 		
-		[Seconds]
+		[S/cm]
 <br/>
 		   </div>
 
@@ -195,6 +250,7 @@ Bed Cycle Time
 <div class='col-md-12' style='text-align: center;'>
 <br/>
 <input type="button"  value="Commit Changes" onclick="UpdateSetpoints();">  
+
 </div>
 </div>
 <!--
@@ -261,5 +317,121 @@ Bed Cycle Time
 </div>
 </div>
 </div>
+
+<!--
+    ====================================================================
+            Pop Up Modules For Calibration
+    ==================================================================== -->
+
+    <!--======================================================== First PopUP ================================================= -->
+   
+    <div class="portfolio-modal modal fade" id="Calibrate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2> Lets Calibrate the EC Meter</h2>
+                            <p class="item-intro text-muted">  Select Your Calbration Fluid, Click continue...</p>
+
+
+           	<div class='row'>
+		Calibration Fluid
+		<br/>
+              <input type="text" id="EC_Cal" class="input-small knob" value="1200" data-min="0" data-max="3000" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+		<br/>
+	
+		[uS/cm]
+		<br/>
+		</div>
+
+
+</div>
+
+
+                            <input type="button" onclick="StartTimer()"  value="Contiune" href="#CalibrateStep2" class="portfolio-link" data-toggle="modal" >  
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--======================================================== First PopUP ================================================= -->
+   
+    <div class="portfolio-modal modal fade" id="CalibrateStep2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2> Calibrating</h2>
+                            <p class="item-intro text-muted"> 
+Time Remaining:
+</p>
+<p id="Progress"></p>
+
+
+                           <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!--======================================================== Calibration Copleet ================================================= -->
+   
+    <div class="portfolio-modal modal fade" id="Compleet" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2> Calibration Compleet</h2>
+                            <p class="item-intro text-muted"> 
+Cell Constant [should be similar to number on side] :
+</p>
+<p id="#K"></p>
+
+				<button type="button" onclick="SaveEEPROM()" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Save Calibration</button>
+                           <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 </body>
 </html>

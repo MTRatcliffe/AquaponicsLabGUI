@@ -1,0 +1,60 @@
+*  
+   <!-- GNU Info
+        ================================================== 
+    This file is part of the Open Source ESP8266 Basesed agricultural controllers
+
+    Free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Open Source pH controller.  If not, see <http://www.gnu.org/licenses/>.
+
+Code and comments provided by Michael Ratcliffe in partnership with AquaponicsLab.org 
+For More information see:
+http://AquaponicsLab.org
+http://MichaelRatcliffe.com
+
+ ================================================== -->
+
+*/
+
+Work Log:
+[m.r]>01/04/2016 Added Webosockets and "knob inputs" to Setpoints.html
+[m.r]>02/04/2016 Added Libraries to sketch folder [Self Contained Project now? Got to test this on seperate machine]
+[m.r]>22/05/2016 Added Websockets and epprom routines to Wifi.html, can now change password and hotspot name
+[m.r]>22/05/2016 Added websokets routine to show current values to setpoints gui [@Paulo, it makes sense]
+[m.r]>25/05/2016 G-zipped all files in data folder, modified header handlers [To free memory up and decrease page load times]
+[m.r]>01/06/2016 Added Over the Air Updates
+[m.r]>19/06/2016 Added rotary file system
+[m.r]>20/06/2016 Read files in data.html [combnes data into .csv file for download]
+[m.r]>20/06/2016 Added graph in data.html using chartist.js 
+[m.r]>02/09/2016 Changed Pin numbers to refelct numbers on nodemcu 
+[m.r]>09/09/2016 Modified call to refresh readings gui [to get rid of lag problems]
+[m.r]>21/09/2016 Added a routne for avoiding button press leading to over feeding
+[p.m]>22/09/2016 Spell checked and verified performance of GUI
+[m.r]>27/09/2016 SSID and Password Now Saved In EEPROM As Recomended by Paulo
+[m.r]>01/09/2017 Combined all .css and .js files into single files to speed up gui serving time, did js by copy and pasting into single file
+[m.r]>02/09/2017 Removed Bootstaps glaphicon icons [they used 0.25mb for a blue icon!!!!] was bloating spiffs
+
+
+[m.r] Michael Thomas Ratcliffe [AquaponicsLab Engineer]    mike@AquaponicsLab.org
+[p.m] Paulo Marini [AquaoponicsLab Founder] Paulo@Aquaponicslab.org
+
+
+
+
+To Do:
+>Impliment gui software update 
+>Add key next to logs graph 
+>Check zoom function works on chart 
+>Increase variables logged 
+
+Known Issues: 
+-Log has 4 data points extra that show as 0 

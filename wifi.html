@@ -30,7 +30,7 @@ http://AquaponicsLab.org
  	<meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="icon" type="image/png" href="img/fish.png">
-        <title>AquaponicsLab</title>
+        <title>AquaponicsLab --Wifi</title>
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="author" content="">
@@ -41,16 +41,16 @@ http://AquaponicsLab.org
         ================================================== -->
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
- <!-- Template CSS Files
+  <!-- Template CSS Files
         ================================================== -->
-	<link rel='stylesheet' href='css/bootstrap.min.css'>
+	<link rel='stylesheet' href='css/temp.css'>
      
-	
- <!-- jQuery -->
-    <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+ <!-- jQuery -->
+    <script src="js/JSFiles.js"></script>
+<!-- javascript
+================================================== -->
+
 <!--
 
        ==================================================
@@ -71,14 +71,14 @@ console.log('WebSocket Error ', error);
 connection.onmessage = function(e) { 
  console.log('Server: ', e.data);
 			 if(e.data === "ChangedWIFIHOTSPOT" ){
-			    alert("HORSPOT WIFI Updated ");
+			    alert("HOTSPOT WIFI Updated ");
 			}
 			if(e.data.startsWith("#HotSpotName#")){
 			document.getElementById("HotSpotName").placeholder = e.data.substring(13);
 			
 			}
 			if(e.data.startsWith("#HotSpotPass#")){
-			document.getElementById("PasswordHotSpot").placeholder = e.data.substring(13);
+			document.getElementById("HotSpotPass").placeholder = e.data.substring(13);
 			}
 			
 
@@ -92,8 +92,8 @@ function UpdateHOTSPOT(){
     var v1 =document.getElementById('HotSpotName').value
     var v2 =document.getElementById('HotSpotPass').value
 
-    connection.send("#NewHorSpotSsid#"+v1); 
-    connection.send("#NewHotSpotPass#"+v2); 
+    connection.send("#HotSpotName#"+v1); 
+    connection.send("#HotSpotPass#"+v2); 
         
     };
 
@@ -109,7 +109,7 @@ function UpdateHOTSPOT(){
 <div class='container'>
 <div class='row'>
 <div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
-<h1><p class="text-warning">Valve Control Made Easy</p></h1>
+<h1><p class="text-warning">Wifi Settings</p></h1>
 </div>
 </div>
 
@@ -119,10 +119,6 @@ function UpdateHOTSPOT(){
         ================================================== -->
 <div class='row'>
 <div class='col-md-12' style='text-align: center;'>
-<h2>
-<i class='fa fa-users'>
-</i> Wifi Settings <i class='fa fa-users'></i>
-</h2>
 </div>
 </div>
 
@@ -147,8 +143,8 @@ function UpdateHOTSPOT(){
   <input type="text" class="form-control" id="HotSpotName" placeholder="Test">
 </div>
 <div class="form-group">
-  <label for="pwd">HotSpot Password:</label>
-<input type="text" class="form-control" id="PasswordHotSpot" placeholder="Test">
+  <label for="pwd">HotSpot Password [8+ Letters]:</label>
+<input type="text" class="form-control" id="HotSpotPass" placeholder="Must be 8 letters long">
 
 </div>
 </div>

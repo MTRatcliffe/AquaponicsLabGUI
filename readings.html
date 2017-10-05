@@ -30,7 +30,7 @@ http://AquaponicsLab.org
  	<meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="icon" type="image/png" href="img/fish.png">
-        <title>AquaponicsLab</title>
+        <title>AquaponicsLab  --Readings</title>
         <meta name="description" content="Michael Ratcliffe">
         <meta name="keywords" content="Michael Ratcliffe">
         <meta name="author" content="Michael Ratcliffe">
@@ -42,31 +42,26 @@ http://AquaponicsLab.org
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
 
-
  <!-- Template CSS Files
         ================================================== -->
-	<link rel='stylesheet' href='css/bootstrap.min.css'>
+	<link rel='stylesheet' href='css/temp.css'>
      
 
-
-
  <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    <script src="js/JSFiles.js"></script>
 <!-- javascript
 ================================================== -->
 
+
 <!-- This is the stuff for the nob inputs -->
-<script src="js/jquery.knob.min.js"></script>
  <script type="text/javascript">
       $(document).ready(function() {   
 
       $('.knob').knob();
       });
     </script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-<!--
 
+<!--
        ==================================================
         WebSockets Code [Lets us change variables]
         ================================================== -->
@@ -77,11 +72,12 @@ var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
 connection.onopen = function () { 
  connection.send('Connect ' + new Date()); 
  connection.send("#ConnectedReadings#");
+connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
 };
 //Page Closed, Tell ESP t Stop Sending Data
-connection.onclose = function () {  
- connection.send("#CLosedReadings#");
-};
+//connection.onclose = function () {  
+// connection.send("#CLosedReadings#");
+//};
 
 connection.onerror = function (error) { 
 console.log('WebSocket Error ', error);
@@ -90,13 +86,13 @@ console.log('WebSocket Error ', error);
 // Checking the Incming message for useful sensor informatin
 connection.onmessage = function(e) { 
 console.log('Server: ', e.data);
-connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
+
 			 
 			if(e.data.startsWith("#Time#")){
 			document.getElementById("time").placeholder = e.data.substring(6);
 			}
 			
-			} 
+			 
 			if(e.data.startsWith("#S1#")){
 			document.getElementById("s1").value = e.data.substring(4);
 			}
@@ -106,8 +102,7 @@ connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
 			if(e.data.startsWith("#S3#")){
 			document.getElementById("s3").value = e.data.substring(4);
 			}   
-			
-
+		
  
 };
 </script>
@@ -122,7 +117,7 @@ connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
 <div class='container'>
 <div class='row'>
 <div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
-<h1><p class="text-warning">Valve Control Made Easy</p></h1>
+<h1><p class="text-warning">Real Time Readings</p></h1>
 </div>
 </div>
 
@@ -132,9 +127,6 @@ connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
         ================================================== -->
 <div class='row'>
 <div class='col-md-12' style='text-align: center;'>
-<h2>
-</i> Real Time Readings </i>
-</h2>
 </div>
 </div>
 
@@ -155,15 +147,14 @@ connection.send("#SendMeSomeData#"); //Ask The ESP To Send Some More Data
             ================================================== -->
 
 <div class='col-md-12' style='text-align: center;'>
-BED Timing Control:<br/>
-<br/>
+
 
 
 <div class="container" >
 <form class="form-inline" role="form">
     <div class="form-group" >
       <div class="col-xs-3" >
-        <label for="time">Time:</label>
+        <label for="time">UpTime Minutes:</label>
         <input class="form-control" id="time" type="text" placeholder="Time">
       </div>
     </div>
@@ -181,31 +172,31 @@ BED Timing Control:<br/>
 	</div>
 
             <div class="col-md-2 "> <center> <br/>
-		Pressure Time 
+		Water Temperature
 		<br/>
-              <input type="text" id="s1" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+              <input type="text" id="s1" class="input-small knob" value="41" data-min="-10" data-max="50" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
 <br/>
-[Seconds]
+[*C]
 <br/>
             </div>
             <div class="col-md-2"> <center> <br/>
-Bed Cycle Time 
+EC
 <br/>
-              <input type="text" id="s2" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+              <input type="text" id="s2" class="input-small knob" value="410" data-min="300" data-max="3000" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
 <br/>
 
-[Minutes]
+[mS/cm]
 <br/>
             </div>
 
             <div class="col-md-2" > <center> <br/>
 		
-		Release  Time
+		EC Setpoint
 		<br/>
-              <input type="text" id="s3" class="input-small knob" value="41" data-min="0" data-max="100" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
+              <input type="text" id="s3" class="input-small knob" value="300" data-min="300" data-max="3000" data-width="160" data-height="160" data-thickness=".2" data-fgColor="#4d4dff" data-displayPrevious="true" data-angleArc="250" data-angleOffset="-125" />
 <br/>
 		
-		[Seconds]
+		[mS/cm]
 <br/>
 		   </div>
 
