@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<head>
+  <!-- GNU Info
+        ================================================== 
+    This file is part of the Open Source ESP8266 Bases Valve controller.
+
+    Free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Open Source pH controller.  If not, see <http://www.gnu.org/licenses/>.
+
+Code and comments provided by Michael Ratcliffe in partnership with AquaponicsLAb.org 
+For More information see:
+http://MichaelRatcliffe.com
+http://AquaponicsLab.org
+
+ ================================================== -->
+
+  <!-- Basic Page Needs
+        ================================================== -->
+ 	<meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="icon" type="image/png" href="img/fish.png">
+        <title>AquaponicsLab --Logs</title>
+        <meta name="description" content="Michael Ratcliffe">
+        <meta name="keywords" content="Michael Ratcliffe">
+        <meta name="author" content="Michael Ratcliffe">
+
+<!-- Mobile Specific Metas
+        ================================================== -->
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+ <!-- Template CSS Files
+        ================================================== -->
+	<link rel='stylesheet' href='css/temp.css'>
+     
+
+ <!-- jQuery -->
+    <script src="js/JSFiles.js"></script>
+<!-- javascript
+================================================== -->
+
+<!--
+
+       ==================================================
+        WebSockets Code [Lets us change variables]
+        ================================================== -->
+<script>
+
+//Declaring a load of variables [javvascrpt seems to be local @@@]
+
+var ReadingsPerday =48
+
+var File,FileNumber;
+var dataH1 = [];
+var dataH2 = [];
+var dataH3 = [];
+var data1V1 = [];
+var data1V2 = [];
+var data1V3 = [];
+var data2V1 = [];
+var data2V2 = [];
+var data2V3 = [];
+var data3V1 = [];
+var data3V2 = [];
+var data3V3 = [];
+var data4V1 = [];
+var data4V2 = [];
+var data4V3 = [];
+var data5V1 = [];
+var data5V2 = [];
+var data5V3 = [];
+var TotalV1 = [];
+var TotalV2 = [];
+var TotalV3 = [];
+var value = [];
+var finalVal =[];
+var dataN =[];
+var dataHN =[];
+var chartdata=[];
+var chartLabel=[];
+
+console.info('M.Ratcliffe @ AquaponicsLab Debug Log:');
+console.info('WebSockets OK');
+var connection = new WebSocket('ws://'+location.hostname+':81/', ['arduino']);
+
+connection.onopen = function () { 
+connection.send('Connect ' + new Date()); 
+connection.send("#ConnectedLogs#");
+};
+
+connection.onerror = function (error) { 
+console.log('WebSocket Error ', error);
+};
+
+connection.onmessage = function(e) { 
+console.log('Server: ', e.data);
+		 
+		//Getting the current log file number from ESP va websockets
+		if(e.data.startsWith("#LogNumber#")){
+		//document.getElementById("FileNumber").value = e.data.substring(11);
+		//var file = e.data.substring(11);
+		File = e.data.substring(11);
+                GetHeaderData();
+				}
+//Getting the current log file number from ESP va websockets
+		if(e.data.startsWith("#LogDeleeted#")){
+		alert("LOG Deleeted ");
+				}
+
+ 
+
+};
+
+//Sending all Three SetPoints one after another
+function DeleetLogs(){
+    connection.send("#DeleetLog#"); 
+    ;     
+ 
+    };
+
+
+//<!--
+ //      ==================================================
+ //       Reading the data log .txt fle and combinng into strings[or w.e we choose] [called from websockets loop]
+  //      ================================================== -->
+
+function GetHeaderData(){
+//Loading Data.csv and pasing data into array for charting
+
+$.get('Log/header.csv', function(data) {
+ // Split the lines
+async: false,
+console.info('HeaderFile Loaded');
+var lines = data.split('\n');
+var i = 0;
+										
+var lines = data.split(/\r\n|\n/);
+var values = lines[0].split(','); // Split up the comma seperated values [colums]
+ // Reading as float, since we'll be doing some operations on this later.
+ dataHN.push(values[0]);
+ dataH1.push(values[1]); 
+ dataH2.push(values[2]);
+ dataH3.push(values[3]);
+
+GetData1();							    
+}); 
+
+};
+function GetData1(){
+
+					$.get('Log/data1.csv', function(data) {
+					async: false,
+					console.info('File data1 Loaded');
+					  // Split the lines
+					  var lines = data.split(/\r\n|\n/);
+						
+
+       						
+							var Length= lines.length;
+							for (var j=0; j<lines.length-1; j++) {
+							var values = lines[j].split(','); // Split up the comma seperated values [colums]
+							   // Reading as float, since we'll be doing some operations on this later.
+							   //data1V1.push(parseFloat(values[0])); 
+							  // data1V2.push(parseFloat(values[1]));
+							  // data1V3.push(parseFloat(values[2]));
+							   data1V1.push(values[0]); 
+							   data1V2.push(values[1]);
+							   data1V3.push(values[2]);
+												}
+							   GetData2();
+							});
+  
+};
+
+function GetData2(){
+
+					$.get('Log/data2.csv', function(data) {
+					async: false,
+					console.info('File data2 Loaded');
+					 
+										
+						var lines = data.split(/\r\n|\n/);
+							for (var j=0; j<lines.length-1; j++) {
+							var values = lines[j].split(','); // Split up the comma seperated values [colums]
+							   // Reading as float, since we'll be doing some operations on this later.
+							   data2V1.push(values[0]); 
+							   data2V2.push(values[1]);
+							   data2V3.push(values[2]);
+												}
+							GetData3();    
+							});  
+
+};
+function GetData3(){ 
+
+						$.get('Log/data3.csv', function(data) {
+						async: false,
+						console.info('File data3 Loaded');
+						// Find the number of lines
+					 	
+						var lines = data.split(/\r\n|\n/);
+
+							for (var j=0; j<lines.length-1; j++) {
+							var values = lines[j].split(','); // Split up the comma seperated values [colums]
+							   // Reading as float, since we'll be doing some operations on this later.
+							   //data3V1.push(parseFloat(values[0])); 
+							  // data3V2.push(parseFloat(values[1]));
+							   //data3V3.push(parseFloat(values[2]));
+							// Reading as float, since we'll be doing some operations on this later.
+							   data3V1.push(values[0]); 
+							   data3V2.push(values[1]);
+							   data3V3.push(values[2]);
+												}
+							    GetData4();
+							});  
+
+
+};
+function GetData4(){
+					$.get('Log/data4.csv', function(data) {
+					async: false,
+						console.info('File data4 Loaded');
+					  // Split the lines
+					  
+						var lines = data.split(/\r\n|\n/);
+						
+
+       						 var headings = lines[0].split(','); // Splice up the first row to get the headings
+
+							for (var j=0; j<lines.length-1; j++) {
+							var values = lines[j].split(','); // Split up the comma seperated values [colums]
+							   // Reading as float, since we'll be doing some operations on this later.
+							   data4V1.push(values[0]); 
+							   data4V2.push(values[1]);
+							   data4V3.push(values[2]);
+												}
+							    GetData5();
+							});  
+
+};
+function GetData5(){
+
+				         $.get('Log/data5.csv', function(data) {
+					async: false,
+					console.info('File data5 Loaded');
+					 
+										
+						var lines = data.split(/\r\n|\n/);
+						
+							for (var j=0; j<lines.length-1; j++) {
+							var values = lines[j].split(','); // Split up the comma seperated values [colums]
+							   // Reading as float, since we'll be doing some operations on this later.
+							   data5V1.push(values[0]); 
+							   data5V2.push(values[1]);
+							   data5V3.push(values[2]);
+												}
+							    SortData();
+							}); 
+
+}
+ function SortData(){
+//Deciding what part of the rotary file system we are in, addng log files in order to suit
+console.info('Combining files');
+var FileNumber = 5;
+if (FileNumber===1){ 
+console.info('Files 1-2-3-4-5');
+TotalV1 = data2V1.concat(data3V1,data4V1,data5V1,data1V1);
+TotalV2 = data2V2.concat(data3V2,data4V2,data5V2,data1V2);
+TotalV3 = data2V3.concat(data3V3,data4V3,data5V3,data1V3);
+			};
+if (FileNumber===2){
+console.info('Files 2-3-4-5-1');
+TotalV1 = data3V1.concat(data4V1,data5V1,data1V1,data2V1);
+TotalV2 = data3V2.concat(data4V2,data5V2,data1V2,data2V2);
+TotalV3 = data3V3.concat(data4V3,data5V3,data1V3,data2V3);
+			};
+if (FileNumber===3){
+console.info('Files 3-4-5-1-2');
+TotalV1 = data4V1.concat(data5V1,data1V1,data2V1,data3V1);
+TotalV2 = data4V2.concat(data5V2,data1V2,data2V2,data3V2);
+TotalV3 = data4V3.concat(data5V3,data1V3,data2V3,data3V3);
+			};
+if (FileNumber===4){
+console.info('Files 4-5-1-2-3');
+TotalV1 = data5V1.concat(data1V1, data2V1,data3V1,data4V1);
+TotalV2 = data5V2.concat(data1V2, data2V2,data3V2,data4V2);
+TotalV3 = data5V3.concat(data1V3, data2V3,data3V3,data4V3);
+			};
+if (FileNumber===5){
+console.info('Files 5-1-2-3-4');
+TotalV1 = data1V1.concat(data2V1, data3V1,data4V1,data5V1);
+TotalV2 = data1V2.concat(data2V2, data3V2,data4V2,data5V2);
+TotalV3 = data1V3.concat(data2V3, data3V3,data4V3,data5V3);
+			} ;  		
+for (var j=0; j<TotalV1.length; j++) {
+//dataN.push(parseFloat(j));
+dataN.push(j);
+			}
+
+
+console.log(dataHN);
+console.log(dataN);
+console.log(dataH1);
+console.log(TotalV1 );
+console.log(dataH2); 
+console.log(TotalV2 ); 
+console.log(dataH3);
+console.log(TotalV3 );
+};
+
+//Sending all Three SetPoints one after another
+function DownloadLog(){
+console.info('Download button clicked');
+finalVal += dataHN[0]+',' +dataH1[0] +','+dataH2[0] +',' +dataH3[0] + '\n';
+for (var i = 0; i < TotalV1.length; i++) {
+        var Value1 =  TotalV1[i].toString();
+	var Value2 =  TotalV2[i].toString();
+	var Value3 =  TotalV3[i].toString();
+	var ValueN =  dataN[i];
+        
+finalVal += ValueN +','+Value1 +','+Value2 +','+Value3 +'\n';
+chartdata+= String(Value1);
+chartLabel+= String(ValueN);
+}
+var pom = document.createElement('a');
+pom.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
+pom.setAttribute('download', 'test.csv');
+pom.click();
+
+//*********************** <<<<< This part  below is not worlking*******
+
+//*********************** <<<<< This part  below is not worlking*******
+
+//
+//var array1 = TotalV1.toString();
+//var array2 = TotalV2.toString().split(',');
+//var array3 = TotalV3.toString().split(',');
+
+//toString();
+//Problem with data type?
+//var newData = {
+//  labels:[dataN],
+// series:[[array1]]
+//};
+
+
+
+//chart.update(newData)
+
+
+}
+
+///
+///
+function GraphDay(){
+var data1 = [];
+var data2 = [];
+var data3 = [];
+var LabelX=[]; 
+var b=0;
+var Length =TotalV1.length-ReadingsPerday;
+for (var i = Length; i < TotalV1.length; i++) {
+    data1.push(TotalV1[i]); 
+    data2.push(TotalV2[i]); 
+    data3.push(TotalV3[i]); 
+    }
+
+//for (var i = 0; i < ReadingsPerday; i++) {
+//	LabelX.push(b);
+  //      b++;
+    //    LabelX.push();  
+    //}
+
+
+
+console.log(data1);
+console.log(data2);
+console.log(data3);
+console.log(LabelX);
+
+var newData = {
+labels:[24,,23,,22,,21,,20,,19,,18,,17,,16,,15,,14,,13,,12,,11,,10,,9,,8,,7,,6,,4,,3,,2,,1,,0],  //Dirty Way, Clear this up with for loop **
+ series: [
+data1,
+data2,
+data3,
+]
+};
+
+
+chart.update(newData)
+}
+
+///////
+function GraphWeek(){
+//*********************** <<<<< This part  below is not worlking*******
+var data1 = [];
+var data2 = [];
+var data3 = [];
+var LabelX=[]; 
+var b=0;
+var Length =TotalV1.length-(ReadingsPerday*7);
+for (var i = Length; i < TotalV1.length; i++) {
+    data1.push(TotalV1[i]); 
+    data2.push(TotalV2[i]); 
+    data3.push(TotalV3[i]); 
+
+}
+
+console.log(data1);
+console.log(data2);
+console.log(data3);
+var newData = {
+labels:['7',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'6',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'5',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'4',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'3',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'2',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'1',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'0'
+
+],
+ series: [
+data1,
+data2,
+data3,
+]
+};
+
+chart.update(newData);
+};
+///////
+function GraphMonth(){
+var data1 = [];
+var data2 = [];
+var data3 = [];
+var LabelX=[]; 
+var b=0;
+var Length =TotalV1.length-(ReadingsPerday*30);
+for (var i = Length; i < TotalV1.length; i++) {
+    data1.push(TotalV1[i]); 
+    data2.push(TotalV2[i]); 
+    data3.push(TotalV3[i]); 
+}
+var newData = {
+labels:['30',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'29',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'28',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'26',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'27',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'25',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'24',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'23',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'22',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'21',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'20',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'19',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'18',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'17',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'16',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'15',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'14',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'13',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'12',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'11',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'10',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'9',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'8',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'7',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'6',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'5',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'4',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'3',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'2',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'1',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+'0'
+
+],
+ series: [
+data1,
+data2,
+data3,
+]
+};
+chart.update(newData)
+}
+
+
+
+
+
+
+
+function GraphYear(){
+var data = [];
+var data = [];
+var Length =TotalV1.length-(ReadingsPerday*365);
+for (var i = Length; i < TotalV1.length; i++) {
+    data.push(TotalV1[i], TotalV1[i+1]); 
+i++
+}
+var newData = {
+ // labels:[dataN.slice(1, 10)],
+ series: [{ data: data}]
+};
+chart.update(newData)
+}
+</script>
+
+
+<!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+</head>
+<body  style='background-color: #000;'>
+<script type="text/javascript">
+//    $(window).load(function(){
+  //     GetHeaderData();
+   // });
+</script>
+
+<div class='container'>
+<div class='row'>
+<div class='col-xs-12 col-md-12 col-lg-12' style='text-align: center;'>
+<h1><p class="text-warning">Farming Made Easy</p></h1>
+</div>
+</div>
+
+<!--
+        ==================================================
+        Second title Settings
+        ================================================== -->
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<h2>
+</i> Sensor Log </i>
+</h2>
+</div>
+</div>
+
+<!--
+        ==================================================
+        Main Image
+        ================================================== 
+<div class="text-xs-center">
+<img class="img-responsive center-block" src="img/fish.png" alt="Michael Ratcliffe" height='330px' width='330px'> 
+</div>
+-->
+
+
+<!--
+
+    ==================================================
+           Displaing the graph
+            ================================================== -->
+
+<div class='col-md-12' style='text-align: center;'>
+
+        <div class="row">
+       <div class="col-md-2 "> <center> <br/>
+	</div>
+         <div class="col-md-8 "> <center> <br/>
+<div class="btn-group">
+  <button type="button" class="btn btn-primary" onclick= GraphDay();>Day</button>
+  <button type="button" class="btn btn-primary" onclick= GraphWeek();>Week</button>
+  <button type="button" class="btn btn-primary" onclick= GraphMonth();>Month</button>
+  <button type="button" class="btn btn-primary" onclick= GraphYear();>Year</button>
+</div>
+<br/>
+<div class="ct-chart ct-golden-section" id="chart1"></div>
+</div>
+</div>
+
+<!-- Button to commit changes, we only call the websockts function if this is called -->
+<div class='row'>
+<div class='col-md-12' style='text-align: center;'>
+<br/>
+<input type="button"  value="Download Log File" onclick="DownloadLog();">  
+<input type="button"  value="Deleet Logs" href="#aquaponicslab" class="portfolio-link" data-toggle="modal"> 
+
+
+</div>
+</div>
+<!--
+    ==================================================
+            Bottom Buttons Section
+            ================================================== -->
+<center>
+<br/>
+<div class='btn-group' role='group' aria-label='MENU'>
+<!--
+    =============
+            Home Button
+            ================== -->
+<a href='index.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Home </a>
+<!--
+    =============
+            About Button
+            ================== -->
+<a href='about.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>About </a>
+<!--
+    =============
+            Wifi Settings
+            ================== -->
+<a href='wifi.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Wifi Setup </a>
+<!--
+    =============
+            SetPoints
+            ================== -->
+<a href='setpoints.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Setpoints </a>
+<!--
+    =============
+            Readings
+            ================== -->
+<a href='readings.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Readings </a>
+<!--
+    =============
+           Logs
+            ================== -->
+<a href='Logs.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Logs </a>
+<!--
+    =============
+            Updates
+            ================== -->
+<a href='updates.html' type='button' class='btn btn-md' style='background-color: #000; frameborder=1; border-color:#656565;'>Updates </a>
+<!--
+    ============================
+            Closing Everything up
+            ================================== -->
+</div>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+
+</div>
+</center>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<script>
+
+var options = {
+
+  // If ticks is explicitly set, then the axis will not compute the ticks with the divisor, but directly use the data in ticks to determine at what points on the axis a tick need to be generated.
+
+  axisX: {
+   type: Chartist.FixedScaleAxis,
+    ticks: ['1', '3', '4', '5']
+  }
+
+};
+var Data = {
+ labels:['1','2','3','4','5'],
+ series: [ ['0','5','10','15','20']]
+};
+var chart = new Chartist.Line('.ct-chart',Data);
+
+
+
+
+
+</script>
+<!--
+    ====================================================================
+            Pop Up Modules
+    ==================================================================== -->
+
+    <!--========================================================Portfolio Modal GNU ================================================= -->
+ <!--========================================================Portfolio Modal AquaponicsLAb ================================================= -->
+    <div class="portfolio-modal modal fade" id="aquaponicslab" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center ">
+                        <div class="modal-body ">
+                            <h2>Deleet All Data</h2>
+                            <p class="item-intro text-muted"> Click Confirm Below To Reset Data Log
+</p>
+                            <button type="button" class="btn btn-primary" value="Download Log File" onclick="DeleetLogs();"></i> Confirm Deleet</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
+
