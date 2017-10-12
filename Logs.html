@@ -117,7 +117,7 @@ console.log('Server: ', e.data);
 				}
 //Getting the current log file number from ESP va websockets
 		if(e.data.startsWith("#LogDeleeted#")){
-		alert("LOG Deleeted ");
+		alert("LOG Deleted ");
 				}
 
  
@@ -753,7 +753,7 @@ removeAll: true,
 <div class='col-md-12' style='text-align: center;'>
 <br/>
 <input type="button"  value="Download Log File" onclick="DownloadLog();">  
-<input type="button"  value="Deleet Logs" href="#aquaponicslab" class="portfolio-link" data-toggle="modal"> 
+<input type="button"  value="Delete Logs" href="#aquaponicslab" class="portfolio-link" data-toggle="modal"> 
 
 
 </div>
@@ -915,7 +915,7 @@ removeAll: true,
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2 text-center ">
                         <div class="modal-body ">
-                            <h2>Deleet All Data</h2>
+                            <h2>Delete All Data</h2>
                             <p class="item-intro text-muted"> Click Confirm Below To Reset Data Log
 </p>
                             <button type="button" class="btn btn-primary" value="Download Log File" onclick="DeleetLogs();"></i> Confirm Deleet</button>
